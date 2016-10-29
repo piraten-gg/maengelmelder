@@ -1,0 +1,85 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: "LatoWeb", sans-serif;
+}
+
+.initiallihidden {
+  display: none;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.sidebar.left {
+  background-color: white;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  min-width: 25%;
+  max-width: 30%;
+  z-index: 500;
+  padding: 1em;
+  overflow: auto;
+}
+
+.sidebar a {
+  color: #002647;
+}
+
+.sidebar .logo {
+  display: inline-block;
+  height: 2.25em;
+  margin-bottom: 1em;
+  margin-left: -0.25em;
+}
+
+.sidebar h1 {
+  display: inline-block;
+  text-decoration: underline;
+}
+
+.sidebar h1 .blue { color: #002647; }
+.sidebar h1 .red  { color: #c12701; }
+
+.sidebar .input {
+  -ms-box-sizing:content-box;
+  -moz-box-sizing:content-box;
+  -webkit-box-sizing:content-box;
+  box-sizing:content-box;
+
+  width: 90%;
+  border: 1px solid #ccc;
+  color: #777;
+  background-color: #eee;
+  font-size: 1em;
+  padding: .25em;
+  margin: 0.5em 0 0.25em 0;
+
+  max-width: 100%;
+}
+
+.sidebar .label {
+  display: block;
+  margin: 1em 0 .5em 0;
+  color: #002647;
+}
+
+.sidebar .button {
+  display: block;
+  margin: 1.5em 0;
+  border: none;
+  padding: .5em;
+  background: #002647;
+  color: white;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}
