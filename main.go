@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./persistence"
+	"github.com/piraten-gg/maengelmelder/persistence"
 	"github.com/codedust/go-httpserve"
 	"fmt"
 	"log"
