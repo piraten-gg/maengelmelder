@@ -55,7 +55,7 @@ var handleAPI = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Fetching geo information failed.")
 			}
 
-			if osmmarker.Address.County == "Kreis Groß-Gerau" {
+			if osmmarker.Address.County == CFG_OWN_COUNTY {
 				if err = storage.StoreMarker(issue.Lat, issue.Lon, osmmarker.DisplayName); err != nil {
 					fmt.Println("Error storing marker", err.Error())
 				}
