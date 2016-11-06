@@ -11,48 +11,50 @@
 <body>
   <div id="map"></div>
   <div class="sidebar left">
-    <h1><span class="red">Mängel</span><span class="blue">melder</span></h1>
-    <img class="logo" src="img/marker_piraten.png">
+    <div class="padbox">
+      <h1><span class="red">Mängel</span><span class="blue">melder</span></h1>
+      <img class="logo" src="img/marker_piraten.png">
 
-    <p>Dies ist eine <b>nicht</b> funktionsfähige Demo!</p>
+      <p>Dies ist eine <b>nicht</b> funktionsfähige Demo!</p>
 
-    <label class="label">Ausgewählter Ort:</label>
-    <div class="input location">--- bitte Ort durch Klicken ausgewählen ---</div>
+      <label class="label">Ausgewählter Ort:</label>
+      <div class="location">Bitte den Ort auf der Karte auswählen.</div>
 
-    <label class="label">Art des Mangels:</label>
-    <select class="input">
-      <option value="-1">-- Bitte auswählen --</option>
-      <option value="0">Müll</option>
-      <option value="7">Vandalismus</option>
-      <option value="3">Straßenschild beschädigt</option>
-      <option value="2">Ampel defekt</option>
-      <option value="5">Straßenbeleuchtung defekt</option>
-      <option value="1">Straßenschäden</option>
-      <option value="4">unnötiges Straßenschild</option>
-      <option value="6">Tierkadaver</option>
-      <option value="8">etwas anderes</option>
-    </select>
+      <label class="label">Art des Mangels:</label>
+      <select class="input">
+        <option value="-1">-- Bitte auswählen --</option>
+        <option value="0">Müll</option>
+        <option value="7">Vandalismus</option>
+        <option value="3">Straßenschild beschädigt</option>
+        <option value="2">Ampel defekt</option>
+        <option value="5">Straßenbeleuchtung defekt</option>
+        <option value="1">Straßenschäden</option>
+        <option value="4">unnötiges Straßenschild</option>
+        <option value="6">Tierkadaver</option>
+        <option value="8">etwas anderes</option>
+      </select>
 
-    <label class="label">Beschreibung:</label>
-    <textarea class="input" rows="4"></textarea>
+      <label class="label">Beschreibung:</label>
+      <textarea class="input" rows="4"></textarea>
 
-    <label class="label">Vertraulichkeit</label>
-    <input id="checkbox_confidential" type="checkbox" class="pointer" >
-    <label for="checkbox_confidential" class="pointer">Vertraulich - nicht auf der Karte anzeigen</label>
+      <label class="label">Vertraulichkeit</label>
+      <input id="checkbox_confidential" type="checkbox" class="pointer" >
+      <label for="checkbox_confidential" class="pointer">Vertraulich - nicht auf der Karte anzeigen</label>
 
-    <label class="label">Mangel mitverfolgen</label>
-    <input id="checkbox_subscribe" type="checkbox" class="pointer">
-    <label for="checkbox_subscribe" class="pointer">Benachrichtigungen erhalten, wenn sich der Bearbeitungsstatus ändert</label>
+      <label class="label">Mangel mitverfolgen</label>
+      <input id="checkbox_subscribe" type="checkbox" class="pointer">
+      <label for="checkbox_subscribe" class="pointer">Benachrichtigungen erhalten, wenn sich der Bearbeitungsstatus ändert</label>
 
-    <div class="initiallihidden subscribebox">
-      <input class="input" type="text" placeholder="Name (optional)"></input>
-      <input class="input" type="mail" placeholder="E-Mail-Adresse" required="1"></input>
+      <div class="initiallihidden subscribebox">
+        <input class="input" type="text" placeholder="Name (optional)"></input>
+        <input class="input" type="mail" placeholder="E-Mail-Adresse" required="1"></input>
+      </div>
+
+      <input type="submit" value="Melden" class="button submitmarker">
+
+      <a href="impressum">Impressum</a>
+
     </div>
-
-    <input type="submit" value="Melden" class="button">
-
-    <a href="impressum">Impressum</a>
-
   </div>
 
   <script src="vendor/leaflet/leaflet.js"></script>

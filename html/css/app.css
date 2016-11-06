@@ -19,12 +19,16 @@ html, body {
   background-color: white;
   background-color: rgba(255, 255, 255, 0.8);
   position: absolute;
-  top: 0; left: 0; bottom: 0;
+  top: 0; left: 0;
+  max-height: 100%;
   min-width: 25%;
   max-width: 30%;
   z-index: 500;
-  padding: 1em;
   overflow: auto;
+}
+
+.sidebar .padbox {
+  padding: 1em;
 }
 
 .sidebar a {
@@ -46,7 +50,7 @@ html, body {
 .sidebar h1 .blue { color: #002647; }
 .sidebar h1 .red  { color: #c12701; }
 
-.sidebar .input {
+.sidebar .input, .sidebar .location {
   -ms-box-sizing:content-box;
   -moz-box-sizing:content-box;
   -webkit-box-sizing:content-box;
@@ -54,8 +58,7 @@ html, body {
 
   width: 90%;
   border: 1px solid #ccc;
-  color: #777;
-  background-color: #eee;
+  color: #555;
   font-size: 1em;
   padding: .25em;
   margin: 0.5em 0 0.25em 0;
@@ -63,9 +66,17 @@ html, body {
   max-width: 100%;
 }
 
+.sidebar .input {
+  background-color: #fff;
+}
+
+.sidebar .location {
+  background-color: #eee;
+}
+
 .sidebar .label {
   display: block;
-  margin: 1em 0 .5em 0;
+  margin: 1em 0 0 0;
   color: #002647;
 }
 
