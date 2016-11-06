@@ -99,7 +99,7 @@ func (s *StorageConn) GetKeyValue(key string) (string, error) {
 
 
 // StoreMarker stores a marker
-func (s *StorageConn) StoreMarker(lon float32, lat float32, displayName string) error {
+func (s *StorageConn) StoreMarker(lon float64, lat float64, displayName string) error {
 	s.mux.Lock()
 	defer s.mux.Unlock()
 

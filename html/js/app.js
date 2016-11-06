@@ -1,14 +1,18 @@
 var app = function() {
+  var self = {};
+
   var defaultCoords = [49.9008, 8.3500];
 
   // show/hide fields for adding a mail address to subscribe to a new issue
-  $('#checkbox_subscribe').on('change', function(){
+  function updateSubcribeForm() {
     if($('#checkbox_subscribe').prop("checked")) {
       $('.subscribebox').show();
     } else {
       $('.subscribebox').hide();
     }
-  });
+  }
+  updateSubcribeForm();
+  $('#checkbox_subscribe').on('change', updateSubcribeForm);
 
   // create the map
   var map = L.map('map', {
@@ -36,12 +40,17 @@ var app = function() {
   }}).addTo(map);
 
   var marker = null;
+  var markerPos = {lat: -1, lon: -1, zoom: -1};
 
   // set the location of a new marker
-  function setLocation(lat, lng, zoom) {
+  function setLocation(lat, lon, zoom) {
+    markerPos.lat = lat;
+    markerPos.lon = lon;
+    markerPos.zoom = zoom;
+
     var baseURL = "https://nominatim.openstreetmap.org/reverse?format=json";
     $.getJSON(
-      baseURL+"&lat="+lat+"&lon="+lng+"&zoom="+zoom+"&addressdetails=1",
+      baseURL+"&lat="+lat+"&lon="+lon+"&zoom="+zoom+"&addressdetails=1",
       function( data ) {
         console.log(data);
         if (data.address.county != "Kreis Groß-Gerau") {
@@ -54,14 +63,15 @@ var app = function() {
     );
 
     if (marker === null) {
-      marker = L.marker([lat, lng], {draggable: 'true', icon: blueIcon}).addTo(map);
+      marker = L.marker([lat, lon], {draggable: 'true', icon: blueIcon}).addTo(map);
 
       marker.on('dragend', function(e){
         var position = marker.getLatLng();
         setLocation(position.lat, position.lng, map.getZoom());
       });
     }
-    marker.setLatLng(new L.LatLng(lat, lng));
+
+    marker.setLatLng(new L.LatLng(lat, lon));
   }
 
   map.on('click', function(e) {
@@ -109,7 +119,6 @@ var app = function() {
     });
   }
 
-
   $.getJSON("/api/v1/markers/show", function( data ) {
     for (var i in data) {
       var d = data[i];
@@ -119,6 +128,35 @@ var app = function() {
       }).addTo(map);
     }
   });
+
+  self.submitMarker = function() {
+    var newMarker = {};
+    newMarker.lat = markerPos.lat;
+    newMarker.lon = markerPos.lon;
+    newMarker.zoom = markerPos.zoom;
+    newMarker.category = parseInt($('.new-marker-form .category').val()) || -1;
+    newMarker.descrption = $('.new-marker-form .description').val() || "";
+    newMarker.confidential = $('#checkbox_confidential').is(':checked');
+    newMarker.user_name = $('.new-marker-form .subName').val() || "";
+    newMarker.user_mail = $('.new-marker-form .subMail').val() || "";
+
+    if (newMarker.lat == -1) {
+      alert("Bitte wählen Sie zuerst einen Punkt auf der Karte aus.")
+    }
+
+    $.post('/api/v1/markers/new', JSON.stringify(newMarker), 'json')
+      .done(function(data){
+        $('.new-marker-form')[0].reset();
+        $('.new-marker-form .location').text('Bitte den Ort auf der Karte auswählen.');
+      })
+      .fail(function(data){
+        console.log("failed to create marker", data);
+      });
+
+    console.log(newMarker);
+  }
+
+  return self;
 }();
 
 // {"lon": 3.4, "lat": 2.2, "category": 3, "desc": "hier ist es", "confidential": false, "user_name":"-", "user_mail":"-"}

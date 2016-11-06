@@ -35,11 +35,11 @@ type OSMmarker struct {
 	Address     Address `json:"address"`
 }
 
-func fetchGeoInformation(lat float32, lon float32, zoom int) (OSMmarker, error) {
+func fetchGeoInformation(lat float64, lon float64, zoom int) (OSMmarker, error) {
 	baseURL := "https://nominatim.openstreetmap.org/reverse?format=json"
 
-	latStr := fmt.Sprintf("%f", lat)
-	lonStr := fmt.Sprintf("%f", lon)
+	latStr := strconv.FormatFloat(lat, 'f', -1, 64)
+	lonStr := strconv.FormatFloat(lon, 'f', -1, 64)
 	zoomStr := strconv.Itoa(zoom)
 
 	fmt.Println("Fetch " + baseURL + "&lat=" + latStr + "&lon=" + lonStr +

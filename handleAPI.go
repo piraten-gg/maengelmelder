@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"github.com/gocraft/web"
 	"log"
-	"math/rand"
-	"time"
 )
 
 func ApiPreMiddleware(w web.ResponseWriter, r *web.Request, next web.NextMiddlewareFunc) {
@@ -29,40 +27,6 @@ func getMarkers(w web.ResponseWriter, r *web.Request) {
 	fmt.Fprintf(w, string(jsonMarkers))
 }
 
-func getNewMarker(w web.ResponseWriter, r *web.Request) {
-	// TODO: remove this (for testing purposes only)
-	type Issue struct {
-		Lat float32 `json:"lat"`
-		Lon float32 `json:"lon"`
-	}
-
-	var issue Issue
-
-	random := rand.New(rand.NewSource(time.Now().Unix()))
-
-	issue.Lat = 49.9008 - 0.2 + random.Float32()*0.36
-	issue.Lon = 8.3500 - 0.05 + random.Float32()*0.3
-
-	osmmarker, err := fetchGeoInformation(issue.Lat, issue.Lon,
-		16)
-
-	if err != nil {
-		fmt.Println("Fetching geo information failed.")
-	}
-
-	if osmmarker.Address.County == CFG_OWN_COUNTY {
-		if err = storage.StoreMarker(issue.Lat, issue.Lon, osmmarker.DisplayName); err != nil {
-			fmt.Println("Error storing marker", err.Error())
-		}
-	} else {
-		rejectWithErrorJSON(w, "invalidmarker", "Marker outside of boundaries.")
-		return
-	}
-
-	a, _ := json.Marshal(issue)
-	fmt.Fprintf(w, string(a))
-}
-
 func newMarker(w web.ResponseWriter, r *web.Request) {
 	requestContent := make([]byte, r.ContentLength)
 	bytesRead, err := r.Body.Read(requestContent)
@@ -72,10 +36,11 @@ func newMarker(w web.ResponseWriter, r *web.Request) {
 	}
 
 	type marker struct {
-		Lat          float32 `json:"lat"`
-		Lon          float32 `json:"lon"`
+		Lat          float64 `json:"lat"`
+		Lon          float64 `json:"lon"`
+		Zoom         int     `json:"zoom"`
 		Category     int     `json:"category"`
-		Desc         string  `json:"desc"`
+		Descrption   string  `json:"descrption"`
 		Confidential bool    `json:"confidential"`
 		UserName     string  `json:"user_name"`
 		UserMail     string  `json:"user_mail"`
@@ -83,9 +48,29 @@ func newMarker(w web.ResponseWriter, r *web.Request) {
 
 	var data marker
 	if err = json.Unmarshal(requestContent, &data); err != nil {
-		rejectWithErrorJSON(w, "couldNotParse", "Could not parse data.")
+		rejectWithErrorJSON(w, "could_not_parse", err.Error())
 		return
 	}
 
 	fmt.Println("New marker: ", data.Lat, data.Lon)
+
+	osmmarker, err := fetchGeoInformation(data.Lat, data.Lon, data.Zoom)
+	if err != nil {
+		log.Println("Fetching geo information failed.")
+		rejectWithErrorJSON(w, "temporary_unavailable", "Service is temporary unavailable.")
+		return
+	}
+
+	if osmmarker.Address.County == CFG_OWN_COUNTY {
+		if err = storage.StoreMarker(data.Lat, data.Lon, osmmarker.DisplayName); err != nil {
+			fmt.Println("Error storing marker", err.Error())
+			rejectWithErrorJSON(w, "could_not_store", "Could not store marker.")
+			return
+		}
+	} else {
+		rejectWithErrorJSON(w, "out_of_boundaries", "Marker outside of boundaries.")
+		return
+	}
+
+	respondJSON(w, stringMap{"code": "success"})
 }

@@ -2,8 +2,19 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
+
+type stringMap map[string]interface{}
+
+// respondJSON writes the given data, encoded as JSON to a http.ResponseWriter
+// w        the http.ResponseWriter
+// data     the data to be sent
+func respondJSON(w http.ResponseWriter, data stringMap) {
+	json, _ := json.Marshal(data)
+	fmt.Fprintf(w, string(json))
+}
 
 // rejectWithErrorJSON writes an error encoded as JSON to a http.ResponseWriter
 // w        the http.ResponseWriter

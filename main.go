@@ -11,7 +11,7 @@ import (
 // the global connection to the database
 var storage *persistence.StorageConn
 
-type Context struct {}
+type Context struct{}
 
 func main() {
 	var err error
@@ -33,8 +33,7 @@ func main() {
 	})
 
 	router.Get("/api/v1/markers/show", getMarkers)
-	router.Get("/api/v1/markers/generate", getNewMarker)
-	router.Post("/api/v1/markers/create", getNewMarker)
+	router.Post("/api/v1/markers/new", newMarker)
 
 	// create or load certificate
 	CreateCertificateIfNotExist(
