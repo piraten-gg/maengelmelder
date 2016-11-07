@@ -1,6 +1,7 @@
 var app = function() {
   var self = {};
 
+  var CFG_OWN_COUNTY = "Kreis Groß-Gerau";
   var defaultCoords = [49.9008, 8.3500];
 
   // show/hide fields for adding a mail address to subscribe to a new issue
@@ -48,17 +49,38 @@ var app = function() {
     markerPos.lon = lon;
     markerPos.zoom = zoom;
 
-    var baseURL = "https://nominatim.openstreetmap.org/reverse?format=json";
+    var baseURL = "https://nominatim.openstreetmap.org/reverse";
+    var baseParameters = "format=json&accept-language=de&addressdetails=1";
     $.getJSON(
-      baseURL+"&lat="+lat+"&lon="+lon+"&zoom="+zoom+"&addressdetails=1",
-      function( data ) {
+      baseURL+"?"+baseParameters+"&lat="+lat+"&lon="+lon+"&zoom="+zoom,
+      function(data) {
         console.log(data);
         if (data.address.county != "Kreis Groß-Gerau") {
           alert("Der gewählte Ort liegt außerhalb des Kreises Groß-Gerau!");
           return;
         }
 
-        $(".location").text(data.display_name);
+        function beautifyAddressDisplayName(display_name) {
+          var house_number_regex = RegExp(/^([0-9]+[ a-zA-Z]*), (.*)/);
+          var house_number_matches = house_number_regex.exec(display_name);
+          if (house_number_matches !== null) {
+            var street_regex = RegExp(/^([^,]+)(, .*)/);
+            var street_matches = street_regex.exec(house_number_matches[2]);
+            if (street_matches !== null) {
+              display_name = street_matches[1] + " " +
+                house_number_matches[1] + street_matches[2];
+            }
+          }
+
+          var search = display_name.search(", "+CFG_OWN_COUNTY);
+          if (search != -1) {
+            display_name = display_name.substring(0, search);
+          }
+
+          return display_name;
+        }
+
+        $(".location").text(beautifyAddressDisplayName(data.display_name));
       }
     );
 
