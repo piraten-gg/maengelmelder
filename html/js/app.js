@@ -61,7 +61,7 @@ var app = function() {
         }
 
         function beautifyAddressDisplayName(display_name) {
-          var house_number_regex = RegExp(/^([0-9]+[ a-zA-Z]*), (.*)/);
+          var house_number_regex = RegExp(/^(\d+ ?[a-zA-Z]?), (.*)/);
           var house_number_matches = house_number_regex.exec(display_name);
           if (house_number_matches !== null) {
             var street_regex = RegExp(/^([^,]+)(, .*)/);
