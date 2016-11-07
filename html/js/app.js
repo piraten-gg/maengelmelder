@@ -60,16 +60,15 @@ var app = function() {
           return;
         }
 
-        function beautifyAddressDisplayName(display_name) {
-          var house_number_regex = RegExp(/^(\d+ ?[a-zA-Z]?), (.*)/);
-          var house_number_matches = house_number_regex.exec(display_name);
-          if (house_number_matches !== null) {
-            var street_regex = RegExp(/^([^,]+)(, .*)/);
-            var street_matches = street_regex.exec(house_number_matches[2]);
-            if (street_matches !== null) {
-              display_name = street_matches[1] + " " +
-                house_number_matches[1] + street_matches[2];
-            }
+        function prettyPrintAddress(data) {
+          var road = data.address.road;
+          var display_name = data.display_name;
+
+          var regex = RegExp('(.*, )?(\\d+ ?[a-zA-Z]?), '+road+', (.*)');
+          var matches = regex.exec(display_name);
+
+          if (matches !== null) {
+            display_name = (matches[1]||"") + road + " " + matches[2] + ", " + matches[3];
           }
 
           var search = display_name.search(", "+CFG_OWN_COUNTY);
@@ -80,7 +79,7 @@ var app = function() {
           return display_name;
         }
 
-        $(".location").text(beautifyAddressDisplayName(data.display_name));
+        $(".location").text(prettyPrintAddress(data));
       }
     );
 
